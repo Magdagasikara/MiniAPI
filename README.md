@@ -1,21 +1,25 @@
 # MiniAPI
 
+ER Diagram
+![image](https://github.com/Magdagasikara/MiniAPI/assets/146171382/1e98c68b-fecf-42a9-8305-20a0cee1bb13)
 
-- Hämta alla personer i systemet
+
+
+- HÃ¤mta alla personer i systemet
 app.MapGet("/person/{options}", PersonHandler.ListPersons);
 OBS DUbbelkolla om tomt funkar nu!
 http://localhost:5195/person/0
  
-- Hämta alla intressen som är kopplade till en specifik person
+- HÃ¤mta alla intressen som Ã¤r kopplade till en specifik person
 app.MapGet("/person/{personId}/interest", PersonHandler.ListPersonsInterests);
 http://localhost:5195/person/7/interest 
 
-- Hämta alla länkar som är kopplade till en specifik person
+- HÃ¤mta alla lÃ¤nkar som Ã¤r kopplade till en specifik person
 app.MapGet("/person/{personId}/link", LinkHandler.ListPersonsLinks);
 http://localhost:5195/person/7/link
 
 - Koppla en person till ett nytt intresse
-Kopplade till flera på en gång för att fylla på min Db: 
+Kopplade till flera pÃ¥ en gÃ¥ng fÃ¶r att fylla pÃ¥ min Db: 
 app.MapPost("/person/{personId}/interest", InterestHandler.AddPersonsInterests);
 http://localhost:5195/person/7/interest
 JSON:
@@ -31,7 +35,7 @@ JSON:
 	}
 ]
  
-- Lägga in nya länkar för en specifik person och ett specifikt intresse
+- LÃ¤gga in nya lÃ¤nkar fÃ¶r en specifik person och ett specifikt intresse
 app.MapPost("/person/{personId}/interest/{interestId}/link", InterestHandler.CreatePersonsLinks);
 http://localhost:5195/person/7/interest/9/link
 JSON:
@@ -44,16 +48,16 @@ JSON:
 	}
 ]
  
-**Extra utmaning (gör om du vill)**
+**Extra utmaning (gÃ¶r om du vill)**
 
-- Ge möjlighet till den som anropar APIet och efterfrågar en person att direkt få ut alla intressen och alla länkar för den personen direkt i en hierarkisk JSON-fil
+- Ge mÃ¶jlighet till den som anropar APIet och efterfrÃ¥gar en person att direkt fÃ¥ ut alla intressen och alla lÃ¤nkar fÃ¶r den personen direkt i en hierarkisk JSON-fil
 app.MapGet("/person/{personId}/interest/link", LinkHandler.ListPersonsInterestsAndLinks);
 http://localhost:5195/person/7/interest/link
 
-- Ge möjlighet för den som anropar APIet att filtrera vad den får ut, som en sökning. Exempelvis som jag skickar med “to” till hämtning av alla personer vill jag ha de som har ett “to” i namnet så som “tobias” eller “tomas”. Detta kan du sen skapa för alla anropen om du vill.
-JUST NU DUMT utan query strings :( så här nu, samma anrop som första med [options]. ska fixas! 
+- Ge mÃ¶jlighet fÃ¶r den som anropar APIet att filtrera vad den fÃ¥r ut, som en sÃ¶kning. Exempelvis som jag skickar med â€œtoâ€ till hÃ¤mtning av alla personer vill jag ha de som har ett â€œtoâ€ i namnet sÃ¥ som â€œtobiasâ€ eller â€œtomasâ€. Detta kan du sen skapa fÃ¶r alla anropen om du vill.
+JUST NU DUMT utan query strings :( sÃ¥ hÃ¤r nu, samma anrop som fÃ¶rsta med [options]. ska fixas! 
 t.ex. http://localhost:5195/person/ma
 
-- Skapa paginering av anropen. När jag anropar exempelvis personer får jag kanske de första 100 personerna och får sen anropa ytterligare gånger för att få fler. Här kan det också vara snyggt att anropet avgör hur många personer jag får i ett anrop så jag kan välja att få säg 10st om jag bara vill ha det.
-JUST NU DUMT utan query strings :( så här, samma anrop som första med [options]. ska fixas!
+- Skapa paginering av anropen. NÃ¤r jag anropar exempelvis personer fÃ¥r jag kanske de fÃ¶rsta 100 personerna och fÃ¥r sen anropa ytterligare gÃ¥nger fÃ¶r att fÃ¥ fler. HÃ¤r kan det ocksÃ¥ vara snyggt att anropet avgÃ¶r hur mÃ¥nga personer jag fÃ¥r i ett anrop sÃ¥ jag kan vÃ¤lja att fÃ¥ sÃ¤g 10st om jag bara vill ha det.
+JUST NU DUMT utan query strings :( sÃ¥ hÃ¤r, samma anrop som fÃ¶rsta med [options]. ska fixas!
 XXXXXXXXXXXXX
