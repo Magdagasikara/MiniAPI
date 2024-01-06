@@ -22,7 +22,7 @@ namespace MiniAPI
             //get all personer in the system
             //  OBS Skapa paginering av anropen. När jag anropar exempelvis personer får jag kanske de första 100 personerna och får sen anropa ytterligare gånger för att få fler. Här kan det också vara snyggt att anropet avgör hur många personer jag får i ett anrop så jag kan välja att få säg 10st om jag bara vill ha det.
             //har jag annat alternativ att fånga användarens input i insomnia än sökvägen?
-            app.MapGet("/person/list/{options}", PersonHandler.ListPersons);
+            app.MapGet("/person/{options}", PersonHandler.ListPersons);
 
             //get all interests for chosen person
             //  OBS (either ID or first letters of the name etc)
