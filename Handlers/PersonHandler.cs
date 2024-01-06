@@ -1,7 +1,11 @@
-﻿using MiniAPI.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using MiniAPI.Data;
 using MiniAPI.Models;
 using MiniAPI.Models.Dtos;
 using MiniAPI.Models.ViewModels;
+using System.Net;
+using System.Text;
+using System.Text.Json;
 
 namespace MiniAPI.Handlers
 {
@@ -15,7 +19,7 @@ namespace MiniAPI.Handlers
         /// List persons in DB - either all of them or selected with filters
         /// </summary>
         /// <param name="options">Enter a number to see that amount of persons per page. Enter a string to show persons with names starting with it. </param>
-        public static IResult ListPersons(ApplicationContext context, string options = "")
+        public static IResult ListPersons(ApplicationContext context, string? options)
         {
 
             ListPersonsViewModel[] result = context.Persons
@@ -30,7 +34,7 @@ namespace MiniAPI.Handlers
 
 
             // Show all persons
-            if (options is null || options == "0")
+            if (options is null || options == "0" || options.ToUpper() == "ALL")
             {
                 return Results.Json(result);
             }
@@ -41,7 +45,7 @@ namespace MiniAPI.Handlers
             if (!int.TryParse(options, out amountPerPage))
             {
                 ListPersonsViewModel[] resultFilter = result
-                    .Where(n => n.FirstName.StartsWith(options))
+                    .Where(n => n.FirstName.ToUpper().StartsWith(options.ToUpper()))
                     .ToArray();
 
                 return Results.Json(resultFilter);
@@ -61,18 +65,49 @@ namespace MiniAPI.Handlers
             return Results.Json(resultPart);
 
         }
-
-        public static IResult CreatePerson(ApplicationContext context, PersonDto person)
+        public static IResult ListPersonsInterests(ApplicationContext context, int personId)
         {
-            context.Persons.Add(new Person()
+            var person = context.Persons
+                .Include(p => p.Interests)
+                .SingleOrDefault(p => p.Id == personId);
+
+            if (person is null)
             {
-                FirstName = person.FirstName,
-                LastName = person.LastName,
-            });
-            context.SaveChanges();
+                return Results.NotFound($"person {personId} not found");
+            }
 
-            // kontrollera om det gick bra innan jag skickar tillbaka ok
+            ListPersonsInterestsViewModel[] result = person
+                .Interests
+                .Select(p => new ListPersonsInterestsViewModel()
+                {
+                    Title = p.Title,
+                    Description = p.Description,
+                })
+                .ToArray();
 
+            return Results.Json(result);
+        }
+        public static IResult CreatePersons(ApplicationContext context, PersonDto[] persons)
+        {
+            foreach (PersonDto person in persons)
+            {
+                context.Persons.Add(new Person()
+                {
+                    FirstName = person.FirstName,
+                    LastName = person.LastName,
+                    PhoneNumber = person.PhoneNumber
+                });
+            }
+            try
+            {
+                context.SaveChanges();
+                return Results.StatusCode((int)HttpStatusCode.Created);
+            }
+            catch
+            {
+                Console.WriteLine("Error saving new person");
+                return Results.BadRequest();
+            }
         }
     }
 }
