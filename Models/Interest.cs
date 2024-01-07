@@ -8,5 +8,11 @@
 
         public virtual ICollection<Person> Persons{ get; set; }
         public virtual ICollection<InterestLink> InterestLinks{ get; set; }
+
+        // fundera på det 
+        //public Interest()
+        //{
+        //    InterestLinks = new List<InterestLink>(); 
+        //}
     }
 }

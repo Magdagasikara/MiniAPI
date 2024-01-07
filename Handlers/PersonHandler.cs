@@ -4,22 +4,14 @@ using MiniAPI.Models;
 using MiniAPI.Models.Dtos;
 using MiniAPI.Models.ViewModels;
 using System.Net;
-using System.Text;
-using System.Text.Json;
 
 namespace MiniAPI.Handlers
 {
     public static class PersonHandler
     {
 
-        public static int pageNumber = 0; //ökar med användning av ListPersons
 
-        /// <summary>
-        /// Everything at once!
-        /// List persons in DB - either all of them or selected with filters
-        /// </summary>
-        /// <param name="options">Enter a number to see that amount of persons per page. Enter a string to show persons with names starting with it. </param>
-        public static IResult ListPersons(ApplicationContext context, string? options)
+        public static IResult ListPersons(ApplicationContext context, string? firstName, string? lastName, int? amountPerPage, int? pageNumber)
         {
 
             ListPersonsViewModel[] result = context.Persons
@@ -34,37 +26,57 @@ namespace MiniAPI.Handlers
 
 
             // Show all persons
-            if (options is null || options == "0" || options.ToUpper() == "ALL")
+            if (firstName is null && lastName is null && amountPerPage is null && pageNumber is null)
             {
                 return Results.Json(result);
             }
 
 
-            // Show a filtered list
-            int amountPerPage;
-            if (!int.TryParse(options, out amountPerPage))
+            // Show a filtered list       
+            if (firstName is not null)
             {
-                ListPersonsViewModel[] resultFilter = result
-                    .Where(n => n.FirstName.ToUpper().StartsWith(options.ToUpper()))
-                    .ToArray();
-
-                return Results.Json(resultFilter);
+                result = result
+                        .Where(n => n.FirstName.ToUpper().StartsWith(firstName.ToUpper()))
+                        .ToArray();
+            }
+            if (lastName is not null)
+            {
+                result = result
+                        .Where(n => n.LastName.ToUpper().StartsWith(lastName.ToUpper()))
+                        .ToArray();
             }
 
 
-            // Show all persons on several pages 
-            int numberOfPages = (int)Math.Ceiling((decimal)result.Length / amountPerPage);
-            int amountOnThisPage = pageNumber < numberOfPages - 1 ? amountPerPage : result.Length % amountPerPage;
-            pageNumber = pageNumber >= numberOfPages - 1 ? 0 : pageNumber++;
+            // Show subpages
+            // check if amountPerPage & pageNumber are integers, otherwise return bad request
+            if (amountPerPage is not null || pageNumber is not null)
+            {
+                int parsedAmountPerPage = 10; //sets default value if only pageNumber not null
+                if (amountPerPage is not null && !int.TryParse(amountPerPage.ToString(), out parsedAmountPerPage))
+                {
+                    return Results.BadRequest("amountPerPage måste vara en integer");
+                }
+                int parsedPageNumber = 1; //sets default value if only amountPerPage not null
+                if (pageNumber is not null && !int.TryParse(pageNumber.ToString(), out parsedPageNumber))
+                {
+                    return Results.BadRequest("pageNumber måste vara en integer");
+                }
 
-            ListPersonsViewModel[] resultPart = result
-                .Skip(numberOfPages * amountPerPage)
-                .Take(amountOnThisPage)
-                .ToArray();
+                int skipAmount = parsedAmountPerPage * (parsedPageNumber-1);
+                int numberOfPages = (int)Math.Ceiling((decimal)result.Length / parsedAmountPerPage);
+                int amountOnThisPage = parsedPageNumber < numberOfPages ? parsedAmountPerPage : result.Length % parsedAmountPerPage;
 
-            return Results.Json(resultPart);
+                result = result
+                 .Skip(skipAmount)
+                 .Take(amountOnThisPage)
+                 .ToArray();
 
+            }
+
+            return Results.Json(result);
         }
+
+
         public static IResult ListPersonsInterests(ApplicationContext context, int personId)
         {
             var person = context.Persons

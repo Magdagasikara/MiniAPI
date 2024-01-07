@@ -7,9 +7,8 @@ ER Diagram
 
 
 - Hämta alla personer i systemet
-app.MapGet("/person/{options}", PersonHandler.ListPersons);
-OBS DUbbelkolla om tomt funkar nu!
-http://localhost:5195/person/0
+app.MapGet("/person", PersonHandler.ListPersons);
+http://localhost:5195/person
  
 - Hämta alla intressen som är kopplade till en specifik person
 app.MapGet("/person/{personId}/interest", PersonHandler.ListPersonsInterests);
@@ -56,12 +55,12 @@ app.MapGet("/person/{personId}/interest/link", LinkHandler.ListPersonsInterestsA
 http://localhost:5195/person/7/interest/link
 
 - Ge möjlighet för den som anropar APIet att filtrera vad den får ut, som en sökning. Exempelvis som jag skickar med “to” till hämtning av alla personer vill jag ha de som har ett “to” i namnet så som “tobias” eller “tomas”. Detta kan du sen skapa för alla anropen om du vill.
-JUST NU DUMT utan query strings :( så här nu, samma anrop som första med [options]. ska fixas! 
-t.ex. http://localhost:5195/person/ma
+http://localhost:5195/person/?firstName=ma&lastName=k
+http://localhost:5195/person/?amountPerPage=3&pageNumber=1&firstName=j&lastName
 
 - Skapa paginering av anropen. När jag anropar exempelvis personer får jag kanske de första 100 personerna och får sen anropa ytterligare gånger för att få fler. Här kan det också vara snyggt att anropet avgör hur många personer jag får i ett anrop så jag kan välja att få säg 10st om jag bara vill ha det.
-JUST NU DUMT utan query strings :( så här, samma anrop som första med [options]. ska fixas!
-XXXXXXXXXXXXX
+http://localhost:5195/person/?amountPerPage=3&pageNumber=2
+http://localhost:5195/person/?amountPerPage=3&pageNumber=1&firstName=j&lastName
 
 
 UML, Class diagram:

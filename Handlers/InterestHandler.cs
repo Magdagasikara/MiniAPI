@@ -28,8 +28,7 @@ namespace MiniAPI.Handlers
             }
             catch
             {
-                Console.WriteLine("Error saving new person");
-                return Results.BadRequest(); // jag vet inte bättre
+                return Results.BadRequest("Error saving new person"); 
             }
         }
 
@@ -98,7 +97,7 @@ namespace MiniAPI.Handlers
                 else
                     return Results.BadRequest($"at least one of interests already exists");
 
-                // instansierar InterestLinks direkt
+                // instansierar InterestLinks direkt?
                 //person.InterestLinks = new List<InterestLink>();
 
             }
@@ -113,9 +112,8 @@ namespace MiniAPI.Handlers
             //    // $"Error saving new interests of person with id {personId}");
             //    return Results.BadRequest(); // jag vet inte bättre
             //}
-            catch (Exception ex)
+            catch 
             {
-                Console.WriteLine($"Exception: {ex}");
                 return Results.BadRequest();
             }
         }
@@ -141,7 +139,7 @@ namespace MiniAPI.Handlers
                 return Results.NotFound($"interest {interestId} not found for person {personId} ");
             }
 
-            // OBS fundera lite till på varför jag ska göra det här
+            // OBS fundera lite till på varför jag ev skulle göra det här
             //if (interest.InterestLinks is null)
             //{
             //    interest.InterestLinks = new List<InterestLink>();
@@ -164,8 +162,7 @@ namespace MiniAPI.Handlers
             }
             catch
             {
-                Console.WriteLine($"Error saving new links of person with id {personId} and interest with id {interestId}");
-                return Results.BadRequest(); // jag vet inte bättre
+                return Results.BadRequest($"Error saving new links of person with id {personId} and interest with id {interestId}");
             }
 
         }
