@@ -1,7 +1,7 @@
 # MiniAPI
 
 ER Diagram
-![image](https://github.com/Magdagasikara/MiniAPI/assets/146171382/1e98c68b-fecf-42a9-8305-20a0cee1bb13)
+![image](https://github.com/Magdagasikara/MiniAPI/assets/146171382/e051c51e-6da5-4553-9464-d3d44a079dcd)
 
 
 
