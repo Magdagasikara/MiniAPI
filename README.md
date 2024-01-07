@@ -1,6 +1,7 @@
 # MiniAPI
 
 ER Diagram
+
 ![image](https://github.com/Magdagasikara/MiniAPI/assets/146171382/e051c51e-6da5-4553-9464-d3d44a079dcd)
 
 
@@ -61,3 +62,7 @@ t.ex. http://localhost:5195/person/ma
 - Skapa paginering av anropen. När jag anropar exempelvis personer får jag kanske de första 100 personerna och får sen anropa ytterligare gånger för att få fler. Här kan det också vara snyggt att anropet avgör hur många personer jag får i ett anrop så jag kan välja att få säg 10st om jag bara vill ha det.
 JUST NU DUMT utan query strings :( så här, samma anrop som första med [options]. ska fixas!
 XXXXXXXXXXXXX
+
+
+UML, Class diagram:
+![image](https://github.com/Magdagasikara/MiniAPI/assets/146171382/969084b4-09f0-4417-8cd0-dc901e16a0b9)
