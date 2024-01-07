@@ -1,67 +1,59 @@
 # MiniAPI
 
-ER Diagram
+
+**ER diagram:**
 
 ![image](https://github.com/Magdagasikara/MiniAPI/assets/146171382/e051c51e-6da5-4553-9464-d3d44a079dcd)
 
 
+**Anrop:**
 
-- Hämta alla personer i systemet
-app.MapGet("/person", PersonHandler.ListPersons);
+- Hämta alla personer i systemet:
+
 http://localhost:5195/person
  
 - Hämta alla intressen som är kopplade till en specifik person
-app.MapGet("/person/{personId}/interest", PersonHandler.ListPersonsInterests);
+
 http://localhost:5195/person/7/interest 
 
 - Hämta alla länkar som är kopplade till en specifik person
-app.MapGet("/person/{personId}/link", LinkHandler.ListPersonsLinks);
+
 http://localhost:5195/person/7/link
 
-- Koppla en person till ett nytt intresse
-Kopplade till flera på en gång för att fylla på min Db: 
-app.MapPost("/person/{personId}/interest", InterestHandler.AddPersonsInterests);
+- Koppla en person till ett nytt intresse (kopplar personen till flera intressen på en gång för att fylla på min Db)
+
 http://localhost:5195/person/7/interest
-JSON:
-[
-	{
-		"id": 9
-	},
-	{
-		"id": 10
-	},
-	{
-		"id": 14
-	}
-]
+
+Json: [ { "id": 9 }, { "id": 10 }, { "id": 14 } ]
  
 - Lägga in nya länkar för en specifik person och ett specifikt intresse
-app.MapPost("/person/{personId}/interest/{interestId}/link", InterestHandler.CreatePersonsLinks);
+
 http://localhost:5195/person/7/interest/9/link
-JSON:
-[
-	{
-		"link": "https://thebeach.se/"
-	},
-	{
-		"link": "https://beachclub.nu/"
-	}
-]
+
+Json: [ { "link": "https://thebeach.se/" }, { "link": "https://beachclub.nu/" } ]
+
+
  
 **Extra utmaning (gör om du vill)**
 
 - Ge möjlighet till den som anropar APIet och efterfrågar en person att direkt få ut alla intressen och alla länkar för den personen direkt i en hierarkisk JSON-fil
-app.MapGet("/person/{personId}/interest/link", LinkHandler.ListPersonsInterestsAndLinks);
+
 http://localhost:5195/person/7/interest/link
 
 - Ge möjlighet för den som anropar APIet att filtrera vad den får ut, som en sökning. Exempelvis som jag skickar med “to” till hämtning av alla personer vill jag ha de som har ett “to” i namnet så som “tobias” eller “tomas”. Detta kan du sen skapa för alla anropen om du vill.
+
 http://localhost:5195/person/?firstName=ma&lastName=k
+
 http://localhost:5195/person/?amountPerPage=3&pageNumber=1&firstName=j&lastName
 
 - Skapa paginering av anropen. När jag anropar exempelvis personer får jag kanske de första 100 personerna och får sen anropa ytterligare gånger för att få fler. Här kan det också vara snyggt att anropet avgör hur många personer jag får i ett anrop så jag kan välja att få säg 10st om jag bara vill ha det.
+
 http://localhost:5195/person/?amountPerPage=3&pageNumber=2
+
 http://localhost:5195/person/?amountPerPage=3&pageNumber=1&firstName=j&lastName
 
 
-UML, Class diagram:
+
+**UML, klassdiagram:**
+
 ![image](https://github.com/Magdagasikara/MiniAPI/assets/146171382/969084b4-09f0-4417-8cd0-dc901e16a0b9)
